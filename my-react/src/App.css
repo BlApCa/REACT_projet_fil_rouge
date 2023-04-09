@@ -114,6 +114,7 @@
   background-color: rgb(78, 79, 87);
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px ;
+  overflow: hidden;
 }
 .listeMove {
   width: 100%;

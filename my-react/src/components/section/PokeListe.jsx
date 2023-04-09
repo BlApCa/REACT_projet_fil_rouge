@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PokeCard from './PokeCard';
 
-const SectionPokeListe = ({liste, lang, searchTerm}) => {
-  console.log(!searchTerm);
-  const flip = (pokemonName) => {
-    console.log('fliped '+pokemonName)
+const SectionPokeListe = ({liste, searchTerm}) => {
+  const [newListe, setNewListe] = useState([])
+
+  const flip = (pokemonName) => { 
     const front = document.getElementById('Front'+pokemonName);
     const back = document.getElementById('Back'+pokemonName);
 
@@ -14,7 +14,6 @@ const SectionPokeListe = ({liste, lang, searchTerm}) => {
     front.style.zIndex = 9
   }
   const unflip = (pokemonName) => {
-    console.log('unfliped '+pokemonName)
     const front = document.getElementById('Front'+pokemonName);
     const back = document.getElementById('Back'+pokemonName);
 
@@ -23,10 +22,32 @@ const SectionPokeListe = ({liste, lang, searchTerm}) => {
     back.style.transform = 'rotateY(-180deg)'
     back.style.zIndex = 9
   }
+  
+  const filteredListe = () => {
+    console.log('in '+searchTerm)
+    const tab = []
+    liste.forEach(pokemon => {
+      if(pokemon.name.toLowerCase().includes(searchTerm)){
+        console.log(pokemon)
+        tab.push(pokemon)
+      }
+      else {
+        pokemon.types.map(type => {
+          if(type[0].toLowerCase().includes(searchTerm)){
+            console.log(pokemon)
+            tab.push(pokemon)
+          }
+        })
+      }
+    })
+    return tab
+  }
 
   return (
     <div className="App-sec-liste">
-      {!searchTerm ? liste.map(pokemon => <PokeCard onEnter={()=>{flip(pokemon.names[lang])}} onLeave={()=>{unflip(pokemon.names[lang])}} key={pokemon.id} pokemon={pokemon} lang={lang} />) : console.log(searchTerm)}
+      {!searchTerm ? liste.map(pokemon => <PokeCard onEnter={()=>{flip(pokemon.name)}} onLeave={()=>{unflip(pokemon.name)}} key={pokemon.id} pokemon={pokemon}/>) 
+        : filteredListe().map(pokemon => <PokeCard onEnter={()=>{flip(pokemon.name)}} onLeave={()=>{unflip(pokemon.name)}} key={pokemon.id} pokemon={pokemon}/>)
+      }
     </div>
   );
 };
